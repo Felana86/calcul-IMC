@@ -26,8 +26,34 @@ function calculateBMI(){
     const height = inputs[0].value;
     const weight = inputs[1].value;
 
-    console.log(height, weight);
+    if (!height || !weight || height <= 0 || weight <= 0){
+      handleError();
+      return;
+    }
 
+    const BMI = (weight / Math.pow(height / 100, 2)).toFixed(1)
+    
+    showResult(BMI);
 }
 
 
+const displayBMI = document.querySelector(".bmi-value");
+const result = document.querySelector(".result");
+
+function handleError(){
+  displayBMI.textContent = "Oops!!!";
+  displayBMI.style.color = "inherit";
+  result.textContent = "Veuillez remplir les formualires"
+}
+
+
+function showResult(BMI){
+  const rank = BMIData.find(data => {
+    if(BMI >= data.range[0] && BMI < data.range[1]) return data;
+    else if (typeof data.range === "number" && BMI >= data.range) return data;
+  })
+
+  displayBMI.textContent = BMI;
+  displayBMI.style.color = `${rank.color}`;
+  result.textContent = `Résultat : ${rank.name}`;
+}
